@@ -1,27 +1,34 @@
-# A groovy modbus library
+A groovy modbus library
+=======================
 
-![Build Status](https://github.com/stephane/libmodbus/actions/workflows/build.yml/badge.svg)
+[![Build Status](https://travis-ci.org/stephane/libmodbus.svg?branch=master)](https://travis-ci.org/stephane/libmodbus)
 
-## Overview
+Overview
+--------
 
 libmodbus is a free software library to send/receive data with a device which
 respects the Modbus protocol. This library can use a serial port or an Ethernet
 connection.
 
 The functions included in the library have been derived from the Modicon Modbus
-Protocol Reference Guide which can be obtained from [www.modbus.org](http://www.modbus.org).
+Protocol Reference Guide which can be obtained from Schneider at
+[www.schneiderautomation.com](http://www.schneiderautomation.com).
 
 The license of libmodbus is *LGPL v2.1 or later*.
 
-The official website is [www.libmodbus.org](http://www.libmodbus.org). The
-website contains the latest version of the documentation.
+The documentation is available as manual pages (`man libmodbus` to read general
+description and list of available functions) or Web pages
+[www.libmodbus.org/documentation/](http://libmodbus.org/documentation/). The
+documentation is licensed under the Creative Commons Attribution-ShareAlike
+License 3.0 (Unported) (<http://creativecommons.org/licenses/by-sa/3.0/>).
 
-The library is written in C and designed to run on Linux, Mac OS X, FreeBSD, Embox,
+The official website is [www.libmodbus.org](http://www.libmodbus.org).
+
+The library is written in C and designed to run on Linux, Mac OS X, FreeBSD and
 QNX and Windows.
 
-You can use the library on MCUs with Embox RTOS.
-
-## Installation
+Installation
+------------
 
 You will only need to install automake, autoconf, libtool and a C compiler (gcc
 or clang) to compile the library and asciidoc and xmlto to generate the
@@ -38,20 +45,27 @@ date (run `ldconfig` as root if required).
 The library provides a *libmodbus.pc* file to use with `pkg-config` to ease your
 program compilation and linking.
 
-If you want to compile with Microsoft Visual Studio, you should follow the
-instructions in `./src/win32/README.md`.
+If you want to compile with Microsoft Visual Studio, you need to install
+<http://code.google.com/p/msinttypes/> to fill the absence of stdint.h.
 
 To compile under Windows, install [MinGW](http://www.mingw.org/) and MSYS then
 select the common packages (gcc, automake, libtool, etc). The directory
 *./src/win32/* contains a Visual C project.
 
-To compile under OS X with [homebrew](http://mxcl.github.com/homebrew/), you
-will need to install the following dependencies first: `brew install autoconf
-automake libtool`.
+To compile under OS X with [homebrew](http://mxcl.github.com/homebrew/), you will need
+to install the following dependencies first: `brew install autoconf automake libtool`.
 
-To build under Embox, you have to use its build system.
+Documentation
+-------------
 
-## Testing
+The documentation can be generated in man pages and HTML files. The HTML files
+aren't built by default by the `make` command but by`make htmldoc` in
+*docs* directory.
+
+The documentation is also available [online](http://libmodbus.org/documentation).
+
+Testing
+-------
 
 Some tests are provided in *tests* directory, you can freely edit the source
 code to fit your needs (it's Free Software :).
@@ -67,15 +81,21 @@ By default, all TCP unit tests will be executed (see --help for options).
 
 It's also possible to run the unit tests with `make check`.
 
-## To report a bug or to contribute
+Report a Bug
+------------
 
-See [CONTRIBUTING](CONTRIBUTING.md) document.
+Before reporting a bug, take care to read the documentation (RTFM!) and to
+provide enough information:
 
-## Documentation
+1. libmodbus version
+2. OS/environment/architecture
+3. libmodbus backend (TCP, RTU, IPv6)
+3. Modbus messages when running in debug mode (`man modbus_set_debug`)
 
-You can serve the local documentation with:
+To report your problem, you can:
 
-```shell
-pip install mkdocs-material
-mkdocs serve
-```
+* fill a bug report on the issue tracker <http://github.com/stephane/libmodbus/issues>.
+* or send an email to the libmodbus mailing list [libmodbus@googlegroups.com](https://groups.google.com/forum/#!forum/libmodbus).
+
+If your prefer live talk when your're looking for help or to offer contribution,
+there is also a channel called #libmodbus on Freenode.
