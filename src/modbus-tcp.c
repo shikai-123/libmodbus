@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright © Stéphane Raimbault <stephane.raimbault@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
@@ -178,7 +178,7 @@ static ssize_t _modbus_tcp_send(modbus_t *ctx, const uint8_t *req, int req_lengt
 
 static int _modbus_tcp_receive(modbus_t *ctx, uint8_t *req)
 {
-    return _modbus_receive_msg(ctx, req, MSG_INDICATION);
+    return _modbus_receive_msg(ctx, req, MSG_INDICATION, NULL, NULL);
 }
 
 static ssize_t _modbus_tcp_recv(modbus_t *ctx, uint8_t *rsp, int rsp_length)

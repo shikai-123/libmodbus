@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright © Stéphane Raimbault <stephane.raimbault@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
@@ -110,7 +110,7 @@ struct _modbus {
 
 void _modbus_init_common(modbus_t *ctx);
 void _error_print(modbus_t *ctx, const char *context);
-int _modbus_receive_msg(modbus_t *ctx, uint8_t *msg, msg_type_t msg_type);
+int _modbus_receive_msg(modbus_t *ctx, uint8_t *msg, msg_type_t msg_type, uint8_t *rbuf, int *rlen);
 
 #ifndef HAVE_STRLCPY
 size_t strlcpy(char *dest, const char *src, size_t dest_size);

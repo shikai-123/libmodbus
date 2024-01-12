@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright © Stéphane Raimbault <stephane.raimbault@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
@@ -294,7 +294,7 @@ static int _modbus_rtu_receive(modbus_t *ctx, uint8_t *req)
     modbus_rtu_t *ctx_rtu = ctx->backend_data;
 
     if (ctx_rtu->confirmation_to_ignore) {
-        _modbus_receive_msg(ctx, req, MSG_CONFIRMATION);
+        _modbus_receive_msg(ctx, req, MSG_CONFIRMATION, NULL, NULL);
         /* Ignore errors and reset the flag */
         ctx_rtu->confirmation_to_ignore = FALSE;
         rc = 0;
@@ -302,7 +302,7 @@ static int _modbus_rtu_receive(modbus_t *ctx, uint8_t *req)
             printf("Confirmation to ignore\n");
         }
     } else {
-        rc = _modbus_receive_msg(ctx, req, MSG_INDICATION);
+        rc = _modbus_receive_msg(ctx, req, MSG_INDICATION, NULL, NULL);
         if (rc == 0) {
             /* The next expected message is a confirmation to ignore */
             ctx_rtu->confirmation_to_ignore = TRUE;

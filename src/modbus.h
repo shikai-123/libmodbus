@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright © Stéphane Raimbault <stephane.raimbault@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
@@ -7,8 +7,8 @@
 #ifndef MODBUS_H
 #define MODBUS_H
 
-// clang-format off
-/* Add this for macros that defined unix flavor */
+ // clang-format off
+ /* Add this for macros that defined unix flavor */
 #if (defined(__unix__) || defined(unix)) && !defined(USG)
 # include <sys/param.h>
 #endif
@@ -83,36 +83,36 @@ MODBUS_BEGIN_DECLS
 #define MODBUS_MAX_READ_BITS  2000
 #define MODBUS_MAX_WRITE_BITS 1968
 
-/* Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 3 page 15)
- * Quantity of Registers to read (2 bytes): 1 to 125 (0x7D)
- * (chapter 6 section 12 page 31)
- * Quantity of Registers to write (2 bytes) 1 to 123 (0x7B)
- * (chapter 6 section 17 page 38)
- * Quantity of Registers to write in R/W registers (2 bytes) 1 to 121 (0x79)
- */
+ /* Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 3 page 15)
+  * Quantity of Registers to read (2 bytes): 1 to 125 (0x7D)
+  * (chapter 6 section 12 page 31)
+  * Quantity of Registers to write (2 bytes) 1 to 123 (0x7B)
+  * (chapter 6 section 17 page 38)
+  * Quantity of Registers to write in R/W registers (2 bytes) 1 to 121 (0x79)
+  */
 #define MODBUS_MAX_READ_REGISTERS     125
 #define MODBUS_MAX_WRITE_REGISTERS    123
 #define MODBUS_MAX_WR_WRITE_REGISTERS 121
 #define MODBUS_MAX_WR_READ_REGISTERS  125
 
-/* The size of the MODBUS PDU is limited by the size constraint inherited from
- * the first MODBUS implementation on Serial Line network (max. RS485 ADU = 256
- * bytes). Therefore, MODBUS PDU for serial line communication = 256 - Server
- * address (1 byte) - CRC (2 bytes) = 253 bytes.
- */
+  /* The size of the MODBUS PDU is limited by the size constraint inherited from
+   * the first MODBUS implementation on Serial Line network (max. RS485 ADU = 256
+   * bytes). Therefore, MODBUS PDU for serial line communication = 256 - Server
+   * address (1 byte) - CRC (2 bytes) = 253 bytes.
+   */
 #define MODBUS_MAX_PDU_LENGTH 253
 
-/* Consequently:
- * - RTU MODBUS ADU = 253 bytes + Server address (1 byte) + CRC (2 bytes) = 256
- *   bytes.
- * - TCP MODBUS ADU = 253 bytes + MBAP (7 bytes) = 260 bytes.
- * so the maximum of both backend in 260 bytes. This size can used to allocate
- * an array of bytes to store responses and it will be compatible with the two
- * backends.
- */
+   /* Consequently:
+    * - RTU MODBUS ADU = 253 bytes + Server address (1 byte) + CRC (2 bytes) = 256
+    *   bytes.
+    * - TCP MODBUS ADU = 253 bytes + MBAP (7 bytes) = 260 bytes.
+    * so the maximum of both backend in 260 bytes. This size can used to allocate
+    * an array of bytes to store responses and it will be compatible with the two
+    * backends.
+    */
 #define MODBUS_MAX_ADU_LENGTH 260
 
-/* Random number to avoid errno conflicts */
+    /* Random number to avoid errno conflicts */
 #define MODBUS_ENOBASE 112345678
 
 /* Protocol exceptions */
@@ -187,7 +187,7 @@ typedef enum {
 MODBUS_API int modbus_set_slave(modbus_t *ctx, int slave);
 MODBUS_API int modbus_get_slave(modbus_t *ctx);
 MODBUS_API int modbus_set_error_recovery(modbus_t *ctx,
-                                         modbus_error_recovery_mode error_recovery);
+    modbus_error_recovery_mode error_recovery);
 MODBUS_API int modbus_set_socket(modbus_t *ctx, int s);
 MODBUS_API int modbus_get_socket(modbus_t *ctx);
 
@@ -218,53 +218,79 @@ MODBUS_API int modbus_set_debug(modbus_t *ctx, int flag);
 MODBUS_API const char *modbus_strerror(int errnum);
 
 MODBUS_API int modbus_read_bits(modbus_t *ctx, int addr, int nb, uint8_t *dest);
+MODBUS_API int modbus_read_bits_msgs(modbus_t *ctx, int addr, int nb, uint8_t *dest, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
+
 MODBUS_API int modbus_read_input_bits(modbus_t *ctx, int addr, int nb, uint8_t *dest);
+MODBUS_API int modbus_read_input_bits_msgs(modbus_t *ctx, int addr, int nb, uint8_t *dest, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
 MODBUS_API int modbus_read_registers(modbus_t *ctx, int addr, int nb, uint16_t *dest);
-MODBUS_API int
-modbus_read_input_registers(modbus_t *ctx, int addr, int nb, uint16_t *dest);
+MODBUS_API int modbus_read_registers_msgs(modbus_t *ctx, int addr, int nb, uint16_t *dest, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
+MODBUS_API int modbus_read_input_registers(modbus_t *ctx, int addr, int nb, uint16_t *dest);
+MODBUS_API int modbus_read_input_registers_msgs(modbus_t *ctx, int addr, int nb, uint16_t *dest, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
 MODBUS_API int modbus_write_bit(modbus_t *ctx, int coil_addr, int status);
+MODBUS_API int modbus_write_bit_msgs(modbus_t *ctx, int coil_addr, int status, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
 MODBUS_API int modbus_write_register(modbus_t *ctx, int reg_addr, const uint16_t value);
+MODBUS_API int modbus_write_register_msgs(modbus_t *ctx, int reg_addr, const uint16_t value, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
 MODBUS_API int modbus_write_bits(modbus_t *ctx, int addr, int nb, const uint8_t *data);
-MODBUS_API int
-modbus_write_registers(modbus_t *ctx, int addr, int nb, const uint16_t *data);
-MODBUS_API int
-modbus_mask_write_register(modbus_t *ctx, int addr, uint16_t and_mask, uint16_t or_mask);
+MODBUS_API int modbus_write_bits_msgs(modbus_t *ctx, int addr, int nb, const uint8_t *data, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
+MODBUS_API int modbus_write_registers(modbus_t *ctx, int addr, int nb, const uint16_t *data);
+MODBUS_API int modbus_write_registers_msgs(modbus_t *ctx, int addr, int nb, const uint16_t *data, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
+MODBUS_API int modbus_mask_write_register(modbus_t *ctx, int addr, uint16_t and_mask, uint16_t or_mask);
+MODBUS_API int modbus_mask_write_register_msgs(modbus_t *ctx, int addr, uint16_t and_mask, uint16_t or_mask, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
 MODBUS_API int modbus_write_and_read_registers(modbus_t *ctx,
-                                               int write_addr,
-                                               int write_nb,
-                                               const uint16_t *src,
-                                               int read_addr,
-                                               int read_nb,
-                                               uint16_t *dest);
+    int write_addr,
+    int write_nb,
+    const uint16_t *src,
+    int read_addr,
+    int read_nb,
+    uint16_t *dest);
+MODBUS_API int modbus_write_and_read_registers_msgs(modbus_t *ctx, int write_addr, int write_nb,
+    const uint16_t *src, int read_addr, int read_nb,uint16_t *dest, 
+    uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
+
+
+
 MODBUS_API int modbus_report_slave_id(modbus_t *ctx, int max_dest, uint8_t *dest);
+MODBUS_API int modbus_report_slave_id_msgs(modbus_t *ctx, int max_dest, uint8_t *dest, uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
 
 MODBUS_API modbus_mapping_t *
 modbus_mapping_new_start_address(unsigned int start_bits,
-                                 unsigned int nb_bits,
-                                 unsigned int start_input_bits,
-                                 unsigned int nb_input_bits,
-                                 unsigned int start_registers,
-                                 unsigned int nb_registers,
-                                 unsigned int start_input_registers,
-                                 unsigned int nb_input_registers);
+    unsigned int nb_bits,
+    unsigned int start_input_bits,
+    unsigned int nb_input_bits,
+    unsigned int start_registers,
+    unsigned int nb_registers,
+    unsigned int start_input_registers,
+    unsigned int nb_input_registers);
 
 MODBUS_API modbus_mapping_t *modbus_mapping_new(int nb_bits,
-                                                int nb_input_bits,
-                                                int nb_registers,
-                                                int nb_input_registers);
+    int nb_input_bits,
+    int nb_registers,
+    int nb_input_registers);
 MODBUS_API void modbus_mapping_free(modbus_mapping_t *mb_mapping);
 
-MODBUS_API int
-modbus_send_raw_request(modbus_t *ctx, const uint8_t *raw_req, int raw_req_length);
+MODBUS_API int modbus_send_raw_request(modbus_t *ctx, const uint8_t *raw_req, int raw_req_length);
+MODBUS_API int modbus_send_raw_request_msgs(modbus_t *ctx, const uint8_t *raw_req, int raw_req_length, uint8_t *sbuf, int *slen);
+
 
 MODBUS_API int modbus_receive(modbus_t *ctx, uint8_t *req);
+MODBUS_API int modbus_receive_msgs(modbus_t *ctx, uint8_t *req, uint8_t *rbuf, int *rlen);
 
 MODBUS_API int modbus_receive_confirmation(modbus_t *ctx, uint8_t *rsp);
+MODBUS_API int modbus_receive_confirmation_msgs(modbus_t *ctx, uint8_t *rsp, uint8_t *rbuf, int *rlen);
 
 MODBUS_API int modbus_reply(modbus_t *ctx,
-                            const uint8_t *req,
-                            int req_length,
-                            modbus_mapping_t *mb_mapping);
+    const uint8_t *req,
+    int req_length,
+    modbus_mapping_t *mb_mapping);
 MODBUS_API int
 modbus_reply_exception(modbus_t *ctx, const uint8_t *req, unsigned int exception_code);
 MODBUS_API int modbus_enable_quirks(modbus_t *ctx, unsigned int quirks_mask);
@@ -303,12 +329,12 @@ MODBUS_API int modbus_disable_quirks(modbus_t *ctx, unsigned int quirks_mask);
 
 MODBUS_API void modbus_set_bits_from_byte(uint8_t *dest, int idx, const uint8_t value);
 MODBUS_API void modbus_set_bits_from_bytes(uint8_t *dest,
-                                           int idx,
-                                           unsigned int nb_bits,
-                                           const uint8_t *tab_byte);
+    int idx,
+    unsigned int nb_bits,
+    const uint8_t *tab_byte);
 MODBUS_API uint8_t modbus_get_byte_from_bits(const uint8_t *src,
-                                             int idx,
-                                             unsigned int nb_bits);
+    int idx,
+    unsigned int nb_bits);
 MODBUS_API float modbus_get_float(const uint16_t *src);
 MODBUS_API float modbus_get_float_abcd(const uint16_t *src);
 MODBUS_API float modbus_get_float_dcba(const uint16_t *src);
