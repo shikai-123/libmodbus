@@ -1,5 +1,5 @@
 /*
- * Copyright © Stéphane Raimbault <stephane.raimbault@gmail.com>
+ * Copyright © 2008-2014 Stéphane Raimbault <stephane.raimbault@gmail.com>
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -8,8 +8,8 @@
 #ifndef _MSC_VER
 #include <unistd.h>
 #endif
-#include <errno.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include <modbus.h>
 
@@ -22,9 +22,10 @@ int main(void)
     ctx = modbus_new_tcp("127.0.0.1", 1502);
     /* modbus_set_debug(ctx, TRUE); */
 
-    mb_mapping = modbus_mapping_new(500, 500, 500, 500);
+    mb_mapping = modbus_mapping_new(500, 500, 500, 500, 0, 0);
     if (mb_mapping == NULL) {
-        fprintf(stderr, "Failed to allocate the mapping: %s\n", modbus_strerror(errno));
+        fprintf(stderr, "Failed to allocate the mapping: %s\n",
+                modbus_strerror(errno));
         modbus_free(ctx);
         return -1;
     }
