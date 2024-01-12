@@ -1,55 +1,54 @@
-# Preface
+# 前言
 **Read this in other languages: [English](https://github.com/shikai-123/libmodbus/blob/master/README.md), [中文](https://github.com/shikai-123/libmodbus/blob/master/README_zh.md).**
 **其他语言版本: [English](https://github.com/shikai-123/libmodbus/blob/master/README.md), [中文](https://github.com/shikai-123/libmodbus/blob/master/README_zh.md).**
 
-# Introduction
+# 介绍
 
-**This is a branch of libmodbus that primarily adds the "message logging" feature. It will not be merged into the main branch. If you are using libmodbus for the first time, I do not recommend using this library.**
+**这是一个libmodbus分支，主要是增加了“报文记录”功能。他不会被合并的主分支上。
+如果你是第一次使用libmodbus，我不建议你使用这个库**
 
-# Functions
-**The function naming convention is to add "_msgs" to the original function name.**
+# 函数
+**函数命名规则就是在原先的函数的名字加上_msgs。**
 ```cpp
-//This is the original function in the library for reading function code 3
+//这是库本身读取功能码3的函数
 MODBUS_API int modbus_read_registers(
     modbus_t *ctx, int addr, int nb, uint16_t *dest);
  
 /*
-This is the newly added function for receiving messages;
-Parameters:
-    sbuf: Downlink message
-    slen: Length of the downlink message
-    rbuf: Uplink message
-    rlen: Length of the uplink message (0 when receiving message fails)
-Return:
-    Maintained consistency with libmodbus
+这是新增函数，用来接收报文；
+参数：
+    sbuf:下发报文
+    slen:下发报文长度
+    rbuf:上送报文
+    rlen:上送报文长度（当接收报文失败，长度为0）
+返回值：
+    保持和libmodbus一致
 */
 MODBUS_API int modbus_read_registers_msgs(
     modbus_t *ctx, int addr, int nb, uint16_t *dest,
     uint8_t *sbuf, int *slen, uint8_t *rbuf, int *rlen);
 ```
 
-# Branches Overview
-I have adapted different versions of modbus and placed them in different branches, which you can download according to your needs.
+# 分支介绍
+我适配了不同modbus版本，放在了不同的分支中，你可以根据你的需要下载。
 
-## Main Branch: Just the main branch of the repository I forked from the open-source author.
-In this branch, the mentioned feature is not supported.
+## 主分支：只是我fork的开源作者的仓库的主分支罢了。
+该分支，不支持本文说的功能。
 
-## Branch 1: modbus_3.1.2_RTUoverTCP_msg
-Firstly, the modbus version is 3.1.2.
-Features of this branch include:
+## 分支1：modbus_3.1.2_RTUoverTCP_msg
+首先modbus版本是3.1.2
+这个分支的特点是：
+1、支持RTU跑在TCP链接连接上。
+2、记录报文
 
-Support for RTU over TCP connections.
-Message logging.
+## 分支2：modbus_3.1.6_unify_file_registers_msg
+首先modbus版本是3.1.6
+这个分支的特点是支持功能码20、21.
+1、支持功能码20、21。
+2、记录报文
 
-## Branch 2: modbus_3.1.6_unify_file_registers_msg
-Firstly, the modbus version is 3.1.6.
-Features of this branch include support for function codes 20 and 21.
-
-Support for function codes 20 and 21.
-Message logging.
-
-## Branch 3: modbus_3.1.10_msg
-This branch is based on the latest mainline as of now (3.1.10) and has message logging implemented.
+## 分支3：modbus_3.1.10_msg
+这个分支，只是目前最新主干，基于这个做了一个报文记录
 
 
 ## demo
@@ -106,7 +105,7 @@ int test01()
 	modbus_free(ctx);
 }
 
-Result:
+结果：
 Connection failed: No error
 ____
 1 3 0 1 0 1 d5 ca
@@ -115,5 +114,7 @@ ____
 	
 	
 	
-## Reference:
-For more details, you can refer to:：https://blog.csdn.net/weixin_46537765/article/details/135554297
+## 参考：
+	具体可以参考：https://blog.csdn.net/weixin_46537765/article/details/135554297
+
+
